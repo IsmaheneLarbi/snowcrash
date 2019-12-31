@@ -1,0 +1,4 @@
+#list all users, flag01 appears
+# check fag01 on /etc/passwd
+
+less /etc/passwd => 42hDRfypTqqnw
