@@ -6,5 +6,3 @@ find / -type f -user flag00 2>/dev/null
 #result, /usr/sbin/john which contains cdiiddwpgswtgt
 #tried as a passwd and didnt work => encrypted passwd maybe ?
 #tried it on dcode which suggested caesar => nottoohardhere
-
-x24ti5gi3x0ol2eh4esiuxias
