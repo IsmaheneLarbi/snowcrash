@@ -1,6 +1,9 @@
-##This repository is empty, which tells us the only way we have to get the token is to run gdb on getflag itself 
+## This repository is empty, which tells us the only way we have to get the token is to exploit getflag itself 
 gdb /bin/getflag
 disas main
+
+# output of command
+
 #   0x08048989 <+67>:	call   0x8048540 <ptrace@plt>
 #   0x0804898e <+72>:	test   %eax,%eax
 #   0x08048990 <+74>:	jns    0x80489a8 <main+98>
@@ -8,16 +11,24 @@ disas main
 #   0x08048999 <+83>:	call   0x80484e0 <puts@plt>
 #   0x0804899e <+88>:	mov    $0x1,%eax
 #   0x080489a3 <+93>:	jmp    0x8048eb2 <main+1388>
-#on line 67, ptrace is called,the return value will be stored in eax, test %eax, %eax puts the value in the ZeroFlag, which is used by jump to determine wheter to jump or not. Here, the command is jns : which means jump if not signed, since ptrace returns -1, the jump won't happen, puts will dosplay "You shouldnt reverse this" , eax is set to one and we exit the program (jmp to line 1338). This means we have to change the return value of ptrace
-#we set a breakpoint in 0x0804898e and run from the start
-b *0x0804898ei r
+
+# on line 67, ptrace is called,the return value will be stored in eax
+# test %eax, %eax puts the value in the ZeroFlag, which is used by jns (jump if not signed) to determine whether to jump or not. 
+# Since ptrace returns -1, the jump won't happen  and puts will display "You shouldn't reverse this".
+# eax is set to one and we exit the program (jmp to line 1338). This means we have to change the return value of ptrace
+# we set a breakpoint in 0x0804898e and run from the start
+
+# =======1st method============
+b *0x0804898e
+i r
 start
 set $eax=0
 stepi
 stepi
-#we notice a pattern to compare eax with userid and then redirect them to the appropriate block according to the userid 
-#=====================================
-0x08048b0a <+452>:	cmp    $0xbbe,%eax
+
+# We notice a pattern to compare eax with userid and then redirect them to the appropriate block according to the userid 
+# =====================================
+   0x08048b0a <+452>:	cmp    $0xbbe,%eax
    0x08048b0f <+457>:	je     0x8048ccb <main+901>
    0x08048b15 <+463>:	cmp    $0xbbe,%eax
    0x08048b1a <+468>:	ja     0x8048b68 <main+546>
@@ -55,29 +66,45 @@ stepi
    0x08048bb6 <+624>:	cmp    $0xbc6,%eax
    0x08048bbb <+629>:	je     0x8048de5 <main+1183>
    0x08048bc1 <+635>:	jmp    0x8048e06 <main+1216>
-#=====================================
-#we get redirected to line main+98
-// to be taken with a grain of salt
-//we keep moving until line 110 and we jump to main+1183
+
+# =====================================
+# We deduce that each of these cmp, je pairs redirects to a token, so we must take the last block to get the last token
 jump *0x08048de5
 token = 7QiHafiNa3HVozsaXkawuYrTstxbpABHD8CPnHJ
 
-#breakpoints used
-##3       breakpoint     keep y   0x0804898e <main+72>
+# breakpoints used
+# 3       breakpoint     keep y   0x0804898e <main+72>
 #	breakpoint already hit 1 time
-#4       breakpoint     keep y   0x080489b4 <main+110>
-#6       breakpoint     keep y   0x080489fe <main+184>
+# 4       breakpoint     keep y   0x080489b4 <main+110>
+# 6       breakpoint     keep y   0x080489fe <main+184>
 
 ##0x08048bb6 <+624>:	cmp    $0xbc6,%eax
 ##0x08048bbb <+629>:	je     0x8048de5 <main+1183>
 ##flag14's userid is 3014
 
 
-==========short==========
+# ==========2nd method: in  short==========
 disas main
-set bp line 72
-goto line 72
+b *0x0804898e
+start
 set $eax=0
 set bp line 110
 c
 jump *0x08048de5
+
+# ======= 3rd method ======
+disas main
+b *0x0804898e
+start
+set $eax=0
+b *0x08048b0a || jump *0x08048b0a || c
+set $eax=3014 #flag14 uid
+c
+# ================================
+
+# Verifying our solution
+level14@SnowCrash:~$ su flag14
+Password:
+Congratulation. Type getflag to get the key and send it to me the owner of this livecd :)
+flag14@SnowCrash:~$ getflag
+Check flag.Here is your token : 7QiHafiNa3HVozsaXkawuYrTstxbpABHD8CPnHJ
