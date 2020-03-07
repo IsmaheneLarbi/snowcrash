@@ -1,14 +1,15 @@
-le programme level09 prend un seul argument et transforme la chaine de l'argument (chaine[i] += i)
+## level09 take one argument and apply transformation (directly to the string or to content of file whose name is string)
 
-Exemple:
+### Example:
 
-level09@SnowCrash:~$ ./level09 aaaaaaaaaaaaaaaaaaaaaaaaaa
-abcdefghijklmnopqrstuvwxyz
+### level09@SnowCrash:~$ ./level09 aaaaaaaaaaaaaaaaaaaaaaaaaa
+### abcdefghijklmnopqrstuvwxyz
 
-Le contenu du fichier token aurait-il subi la même transformation ?
-On le reverse chaine[i] -= i
+## Maybe it's the same transformation for content of file 'token' ?
 
-Un petit programme en C pour le faire rapidement:
+### We reverse string[i] -= i
+
+## A little program to reverse transformation of content in file 'token'
 
 int	main(int ac, char **av)
 {
@@ -27,4 +28,6 @@ int	main(int ac, char **av)
 	return (0);
 }
 
-gcc main.c -o reverse && ./reverse token
+### gcc main.c -o reverse && ./reverse token
+
+## We reversed transformation of file 'token' and now we have token to authenticate as flag09
