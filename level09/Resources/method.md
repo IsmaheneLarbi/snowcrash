@@ -1,4 +1,4 @@
-## level09 take one argument and apply transformation (directly to the string or to content of file whose name is string)
+## level09 take one argument and apply transformation directly to the string
 
 ### Example:
 
