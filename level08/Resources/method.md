@@ -6,4 +6,6 @@
 
 ### ln -s ~/token /tmp/getflag && ./level08 /tmp/getflag
 
-## The program accept file and display token
+## The program accept file and displays the passeord of flag08
+su flag08
+then getflag
