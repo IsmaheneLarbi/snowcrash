@@ -8,4 +8,5 @@
 
 ## The program accept file and displays the passeord of flag08
 su flag08
+pwd: quif5eloekouj29ke0vouxean
 then getflag
