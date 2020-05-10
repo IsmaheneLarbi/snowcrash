@@ -1,5 +1,6 @@
 #include <fcntl.h>
 #include <strings.h>
+#include <string.h>
 
 int main(int argc, char **argv)
 {
@@ -9,11 +10,14 @@ int main(int argc, char **argv)
 
         i = 0;
         c = i;
-        it = strlen(const char *(&argv[1]));
+        it = strlen(argv[1]);
         while(i < it)
         {
-                c = argv[1][i] + i;
-                write(1, c, 1);
+                c = argv[1][i] - i;
+                write(1, &c, 1);
                 i++;
         }
+
+        write(1, '\n', 1);
 }
+~  
